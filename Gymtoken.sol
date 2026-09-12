@@ -16,12 +16,36 @@ contract GymToken is ERC20("GymToken", "G"), Ownable(msg.sender) {
     
     struct productById {
         uint256 id;
-        product products;
+        product product;
     }
     
-    mapping(address => productById[]) internal marketplus;
+    struct sales {
+        uint256 id;
+        string productName;
+        address client;
+        uint256 quantity;
+        uint256 time;
+        uint256 totalPrice;
+        bool status;
+    }
+    
+    struct purchases {
+        uint256 id;
+        string productName;
+        address gymOwner;
+        uint256 quantity;
+        uint256 time;
+        uint256 totalPrice;
+    }
+
+    mapping(address => productById[]) internal marketplace;
+
+    mapping(address => sales[]) internal salesGymOwner;
+    mapping(address => purchases[]) internal purchasesClinet;
+
 
     event SubscriptionPaid(address indexed client, address indexed GymOwner, uint256 amount);
+    event ProductBought(address indexed client, address indexed GymOwner, uint256 ProductId, uint256 quantity);
 
     function rewardTokenSubscription(address recipient, uint256 amount) external onlyOwner {
         _mint(recipient, amount);
@@ -29,6 +53,7 @@ contract GymToken is ERC20("GymToken", "G"), Ownable(msg.sender) {
 
     function paySubscription(address GymOwner, uint256 amount) external {
         address clinet = msg.sender;
+        approve(GymOwner, amount);
         transferFrom(clinet, GymOwner, amount);
         emit SubscriptionPaid(clinet, GymOwner, amount);
     }
@@ -36,13 +61,13 @@ contract GymToken is ERC20("GymToken", "G"), Ownable(msg.sender) {
     function addProduct(uint256 _ProductId, string memory _name, string memory _description, uint256 _stok, uint256 _price, string[] memory _productImage) external {
         product memory newProduct = product(_name, _description, _stok, _price, _productImage);
         productById memory p = productById(_ProductId, newProduct);
-        marketplus[msg.sender].push(p);
+        marketplace[msg.sender].push(p);
     }
 
-    function findTheProductIndex(uint256 _ProductId) internal view returns (uint256 index, bool found) {
-        productById[] storage userProducts = marketplus[msg.sender];
-        for (uint256 i = 0; i < userProducts.length; i++) {
-            if (userProducts[i].id == _ProductId) {
+    function findTheProductIndex(address addrMarketplace, uint256 _ProductId) internal view returns (uint256 index, bool found) {
+        productById[] storage userProduct = marketplace[addrMarketplace];
+        for (uint256 i = 0; i < userProduct.length; i++) {
+            if (userProduct[i].id == _ProductId) {
                 return (i, true);
             }
         }
@@ -50,30 +75,63 @@ contract GymToken is ERC20("GymToken", "G"), Ownable(msg.sender) {
     }
 
     function editProduct(uint256 _ProductId, string memory _name, string memory _description, uint256 _stok, uint256 _price, string[] memory _productImage) external {
-        (uint256 index, bool found) = findTheProductIndex(_ProductId);
+        (uint256 index, bool found) = findTheProductIndex(msg.sender, _ProductId);
         require(found, "Product Not Found");
 
-        productById storage target = marketplus[msg.sender][index];
-        target.products.name = _name;
-        target.products.description = _description;
-        target.products.stok = _stok;
-        target.products.price = _price;
-        target.products.productImage = _productImage;
+        productById storage target = marketplace[msg.sender][index];
+        target.product.name = _name;
+        target.product.description = _description;
+        target.product.stok = _stok;
+        target.product.price = _price;
+        target.product.productImage = _productImage;
     }
 
     function removeProduct(uint256 _ProductId) external {
-        (uint256 index, bool found) = findTheProductIndex(_ProductId);
+        (uint256 index, bool found) = findTheProductIndex(msg.sender ,_ProductId);
         require(found, "Product Not Found");
 
-        productById[] storage userProducts = marketplus[msg.sender];
-        for (uint256 i = index; i < userProducts.length - 1; i++) {
-            userProducts[i] = userProducts[i + 1];
+        productById[] storage userProduct = marketplace[msg.sender];
+        for (uint256 i = index; i < userProduct.length - 1; i++) {
+            userProduct[i] = userProduct[i + 1];
         }
 
-        userProducts.pop();
+        userProduct.pop();
     }
 
-    function getMerchantProducts(address _merchant) external view returns (productById[] memory) {
-        return marketplus[_merchant];
+    function getMerchantProduct(address _merchant) external view returns (productById[] memory) {
+        return marketplace[_merchant];
+    }
+
+    function    buyProduct(uint256 _id, address addMarketplace, uint256 _ProductId, uint256 _quantity) external {
+        require(_quantity > 0, "Quantity must be greater than 0");
+        (uint256 index, bool found) = findTheProductIndex(addMarketplace, _ProductId);
+        require(found, "Product Not Found");
+        require(marketplace[addMarketplace][index].product.stok >= _quantity, "_quantity is not avilible is stell just marketplace[addMarketplace][index].product.stok");
+
+        require(balanceOf(msg.sender) >= marketplace[addMarketplace][index].product.price * _quantity, "Price is not correct");
+        marketplace[addMarketplace][index].product.stok -= _quantity;
+
+        approve(addMarketplace, marketplace[addMarketplace][index].product.price * _quantity);
+        transferFrom(msg.sender, addMarketplace, marketplace[addMarketplace][index].product.price * _quantity);
+        emit ProductBought(msg.sender, addMarketplace, _ProductId, _quantity);
+
+        sales memory newSales = sales(_id, marketplace[addMarketplace][index].product.name, msg.sender, _quantity, block.timestamp, marketplace[addMarketplace][index].product.price * _quantity, false);
+        purchases memory newPurchases = purchases(_id, marketplace[addMarketplace][index].product.name, addMarketplace, _quantity, block.timestamp, marketplace[addMarketplace][index].product.price * _quantity);
+
+        salesGymOwner[addMarketplace].push(newSales);
+        purchasesClinet[msg.sender].push(newPurchases);
+    }
+
+    function    getsales() external view returns (sales[] memory) {
+        return salesGymOwner[msg.sender];
+    }
+
+    function    getPurchases() external view returns (purchases[] memory) {
+        return purchasesClinet[msg.sender];
+    }
+
+    function changeStatus(uint256 _id) external {
+        sales storage sale = salesGymOwner[msg.sender][_id];
+        sale.status = true;
     }
 }

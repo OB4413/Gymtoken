@@ -163,6 +163,31 @@
 					{
 						"indexed": true,
 						"internalType": "address",
+						"name": "client",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "GymOwner",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "SubscriptionPaid",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
 						"name": "from",
 						"type": "address"
 					},
@@ -181,6 +206,44 @@
 				],
 				"name": "Transfer",
 				"type": "event"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_ProductId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "_name",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "_description",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_stok",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_price",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string[]",
+						"name": "_productImage",
+						"type": "string[]"
+					}
+				],
+				"name": "addProduct",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
 			},
 			{
 				"inputs": [
@@ -263,6 +326,102 @@
 				"type": "function"
 			},
 			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_ProductId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "_name",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "_description",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_stok",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_price",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string[]",
+						"name": "_productImage",
+						"type": "string[]"
+					}
+				],
+				"name": "editProduct",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_merchant",
+						"type": "address"
+					}
+				],
+				"name": "getMerchantProducts",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "id",
+								"type": "uint256"
+							},
+							{
+								"components": [
+									{
+										"internalType": "string",
+										"name": "name",
+										"type": "string"
+									},
+									{
+										"internalType": "string",
+										"name": "description",
+										"type": "string"
+									},
+									{
+										"internalType": "uint256",
+										"name": "stok",
+										"type": "uint256"
+									},
+									{
+										"internalType": "uint256",
+										"name": "price",
+										"type": "uint256"
+									},
+									{
+										"internalType": "string[]",
+										"name": "productImage",
+										"type": "string[]"
+									}
+								],
+								"internalType": "struct GymToken.product",
+								"name": "products",
+								"type": "tuple"
+							}
+						],
+						"internalType": "struct GymToken.productById[]",
+						"name": "",
+						"type": "tuple[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
 				"inputs": [],
 				"name": "name",
 				"outputs": [
@@ -289,6 +448,37 @@
 				"type": "function"
 			},
 			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "GymOwner",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "paySubscription",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_ProductId",
+						"type": "uint256"
+					}
+				],
+				"name": "removeProduct",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
 				"inputs": [],
 				"name": "renounceOwnership",
 				"outputs": [],
@@ -303,9 +493,9 @@
 						"type": "address"
 					},
 					{
-						"internalType": "uint16",
+						"internalType": "uint256",
 						"name": "amount",
-						"type": "uint16"
+						"type": "uint256"
 					}
 				],
 				"name": "rewardTokenSubscription",
@@ -591,11 +781,11 @@
 			]
 		},
 		"Gymtoken.sol": {
-			"keccak256": "0xb83703ea80c8bf1b54a2f2e3713ac0d8ae4af3440f0065f0499bf86e8209a80c",
+			"keccak256": "0xc5d727a45417404075bb59f3fac549bd71a31c440295d0b0eb122eaeb5c73873",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://ae3c982d093aa16ddd7c145cb06ed6e906a644468832bb5c559e463a5af02bef",
-				"dweb:/ipfs/QmbfaN1eLe8HA7KTGG9FRmJT28bJHwLCwa7TzWn3rDs7x6"
+				"bzz-raw://1b4e56d48e0fe495f879b31d11d8603becd9ffda85af1382f5bd377e1567aaa9",
+				"dweb:/ipfs/QmZ16Dz5ydsawzQzBhALdKiu5gsb32XXjZcaCrQqGxbkVV"
 			]
 		}
 	},
