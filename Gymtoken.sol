@@ -6,20 +6,20 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract GymToken is ERC20("GymToken", "G"), Ownable(msg.sender) {
     
-    struct prodact {
+    struct product {
         string name;
         string description;
         uint256 stok;
         uint256 price;
-        string[] prodactImage;
+        string[] productImage;
     }
     
-    struct prodactById {
+    struct productById {
         uint256 id;
-        prodact prodacts;
+        product products;
     }
     
-    mapping(address => prodactById[]) internal marketplus;
+    mapping(address => productById[]) internal marketplus;
 
     event SubscriptionPaid(address indexed client, address indexed GymOwner, uint256 amount);
 
@@ -33,39 +33,39 @@ contract GymToken is ERC20("GymToken", "G"), Ownable(msg.sender) {
         emit SubscriptionPaid(clinet, GymOwner, amount);
     }
 
-    function addProdact(uint256 _ProdactId, string memory _name, string memory _description, uint256 _stok, uint256 _price, string[] memory _prodactImage) external {
-        prodact memory newProdact = prodact(_name, _description, _stok, _price, _prodactImage);
-        prodactById memory p = prodactById(_ProdactId, newProdact);
+    function addProduct(uint256 _ProductId, string memory _name, string memory _description, uint256 _stok, uint256 _price, string[] memory _productImage) external {
+        product memory newProduct = product(_name, _description, _stok, _price, _productImage);
+        productById memory p = productById(_ProductId, newProduct);
         marketplus[msg.sender].push(p);
     }
 
-    function findTheProdactIndex(uint256 _ProdactId) internal view returns (uint256 index, bool found) {
-        prodactById[] storage userProducts = marketplus[msg.sender];
+    function findTheProductIndex(uint256 _ProductId) internal view returns (uint256 index, bool found) {
+        productById[] storage userProducts = marketplus[msg.sender];
         for (uint256 i = 0; i < userProducts.length; i++) {
-            if (userProducts[i].id == _ProdactId) {
+            if (userProducts[i].id == _ProductId) {
                 return (i, true);
             }
         }
         return (0, false);
     }
 
-    function editProdact(uint256 _ProdactId, string memory _name, string memory _description, uint256 _stok, uint256 _price, string[] memory _prodactImage) external {
-        (uint256 index, bool found) = findTheProdactIndex(_ProdactId);
+    function editProduct(uint256 _ProductId, string memory _name, string memory _description, uint256 _stok, uint256 _price, string[] memory _productImage) external {
+        (uint256 index, bool found) = findTheProductIndex(_ProductId);
         require(found, "Product Not Found");
 
-        prodactById storage target = marketplus[msg.sender][index];
-        target.prodacts.name = _name;
-        target.prodacts.description = _description;
-        target.prodacts.stok = _stok;
-        target.prodacts.price = _price;
-        target.prodacts.prodactImage = _prodactImage;
+        productById storage target = marketplus[msg.sender][index];
+        target.products.name = _name;
+        target.products.description = _description;
+        target.products.stok = _stok;
+        target.products.price = _price;
+        target.products.productImage = _productImage;
     }
 
-    function removeProdact(uint256 _ProdactId) external {
-        (uint256 index, bool found) = findTheProdactIndex(_ProdactId);
+    function removeProduct(uint256 _ProductId) external {
+        (uint256 index, bool found) = findTheProductIndex(_ProductId);
         require(found, "Product Not Found");
 
-        prodactById[] storage userProducts = marketplus[msg.sender];
+        productById[] storage userProducts = marketplus[msg.sender];
         for (uint256 i = index; i < userProducts.length - 1; i++) {
             userProducts[i] = userProducts[i + 1];
         }
@@ -73,7 +73,7 @@ contract GymToken is ERC20("GymToken", "G"), Ownable(msg.sender) {
         userProducts.pop();
     }
 
-    function getMerchantProducts(address _merchant) external view returns (prodactById[] memory) {
+    function getMerchantProducts(address _merchant) external view returns (productById[] memory) {
         return marketplus[_merchant];
     }
 }
