@@ -116,14 +116,14 @@ contract GymToken is ERC20("GymToken", "G"), Ownable(msg.sender), ERC2771Context
     }
 
 
-    function buyProduct(address buyer, address addMarketplace, uint256 _ProductId, uint256 _quantity, uint256 _TotalPrice) internal {
+    function buyProduct(address addMarketplace, uint256 _ProductId, uint256 _quantity, uint256 _TotalPrice) internal {
         require(_quantity > 0, "Quantity must be greater than 0");
         (uint256 index, bool found) = findTheProductIndex(addMarketplace, _ProductId);
         require(found, "Product Not Found");
 
         uint256 totalPrice = marketplace[addMarketplace][index].product.price * _quantity;
         string memory productName = marketplace[addMarketplace][index].product.name;
-        address _clinet = buyer;
+        address _clinet = _msgSender();
 
         require(marketplace[addMarketplace][index].product.stok >= _quantity, "_quantity is not avilible is stell just marketplace[addMarketplace][index].product.stok");
         require(totalPrice <= _TotalPrice, "Price exceeds signed maximum");
