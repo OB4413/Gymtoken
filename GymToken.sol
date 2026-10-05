@@ -60,7 +60,7 @@ contract GymToken is ERC20("GymToken", "G"), Ownable(msg.sender), ERC2771Context
     event removeProductSucc(address indexed GymMarketplace, uint256 ProductId);
 
     function rewardTokenSubscription(address recipient, uint256 amount) external onlyOwner {
-        _mint(recipient, amount);
+        _mint(recipient, amount * 10 ** decimals());
     }
 
     function paySubscription(address GymOwner, uint256 amount) external {

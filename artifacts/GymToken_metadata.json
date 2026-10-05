@@ -9,6 +9,17 @@
 				"inputs": [
 					{
 						"internalType": "address",
+						"name": "trustedForwarder",
+						"type": "address"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
 						"name": "spender",
 						"type": "address"
 					},
@@ -175,6 +186,37 @@
 					{
 						"indexed": false,
 						"internalType": "uint256",
+						"name": "ProductId",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "quantity",
+						"type": "uint256"
+					}
+				],
+				"name": "ProductBought",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "client",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "GymOwner",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
 						"name": "amount",
 						"type": "uint256"
 					}
@@ -208,6 +250,166 @@
 				"type": "event"
 			},
 			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "GymMarketplace",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "productName",
+						"type": "string"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "description",
+						"type": "string"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "stok",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "price",
+						"type": "uint256"
+					}
+				],
+				"name": "addProductSucc",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "gymOwner",
+						"type": "address"
+					},
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "id",
+								"type": "uint256"
+							},
+							{
+								"internalType": "string",
+								"name": "productImage",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "productName",
+								"type": "string"
+							},
+							{
+								"internalType": "address",
+								"name": "client",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "quantity",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "time",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "totalPrice",
+								"type": "uint256"
+							},
+							{
+								"internalType": "bool",
+								"name": "status",
+								"type": "bool"
+							}
+						],
+						"indexed": false,
+						"internalType": "struct GymToken.sales",
+						"name": "sale",
+						"type": "tuple"
+					},
+					{
+						"indexed": false,
+						"internalType": "bool",
+						"name": "delivered",
+						"type": "bool"
+					}
+				],
+				"name": "changeStatusSale",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "GymMarketplace",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "description",
+						"type": "string"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "stok",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "price",
+						"type": "uint256"
+					}
+				],
+				"name": "editProductSucc",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "GymMarketplace",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "ProductId",
+						"type": "uint256"
+					}
+				],
+				"name": "removeProductSucc",
+				"type": "event"
+			},
+			{
 				"inputs": [
 					{
 						"internalType": "uint256",
@@ -236,7 +438,7 @@
 					},
 					{
 						"internalType": "string[]",
-						"name": "_productImage",
+						"name": "_productImages",
 						"type": "string[]"
 					}
 				],
@@ -313,6 +515,19 @@
 				"type": "function"
 			},
 			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "index",
+						"type": "uint256"
+					}
+				],
+				"name": "changeStatus",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
 				"inputs": [],
 				"name": "decimals",
 				"outputs": [
@@ -354,7 +569,7 @@
 					},
 					{
 						"internalType": "string[]",
-						"name": "_productImage",
+						"name": "_productImages",
 						"type": "string[]"
 					}
 				],
@@ -364,14 +579,8 @@
 				"type": "function"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "_merchant",
-						"type": "address"
-					}
-				],
-				"name": "getMerchantProducts",
+				"inputs": [],
+				"name": "getPurchases",
 				"outputs": [
 					{
 						"components": [
@@ -381,41 +590,113 @@
 								"type": "uint256"
 							},
 							{
-								"components": [
-									{
-										"internalType": "string",
-										"name": "name",
-										"type": "string"
-									},
-									{
-										"internalType": "string",
-										"name": "description",
-										"type": "string"
-									},
-									{
-										"internalType": "uint256",
-										"name": "stok",
-										"type": "uint256"
-									},
-									{
-										"internalType": "uint256",
-										"name": "price",
-										"type": "uint256"
-									},
-									{
-										"internalType": "string[]",
-										"name": "productImage",
-										"type": "string[]"
-									}
-								],
-								"internalType": "struct GymToken.product",
-								"name": "products",
-								"type": "tuple"
+								"internalType": "string",
+								"name": "productImage",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "productName",
+								"type": "string"
+							},
+							{
+								"internalType": "address",
+								"name": "gymOwner",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "quantity",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "time",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "totalPrice",
+								"type": "uint256"
 							}
 						],
-						"internalType": "struct GymToken.productById[]",
+						"internalType": "struct GymToken.purchases[]",
 						"name": "",
 						"type": "tuple[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getsales",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "id",
+								"type": "uint256"
+							},
+							{
+								"internalType": "string",
+								"name": "productImage",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "productName",
+								"type": "string"
+							},
+							{
+								"internalType": "address",
+								"name": "client",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "quantity",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "time",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "totalPrice",
+								"type": "uint256"
+							},
+							{
+								"internalType": "bool",
+								"name": "status",
+								"type": "bool"
+							}
+						],
+						"internalType": "struct GymToken.sales[]",
+						"name": "",
+						"type": "tuple[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "forwarder",
+						"type": "address"
+					}
+				],
+				"name": "isTrustedForwarder",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
 					}
 				],
 				"stateMutability": "view",
@@ -594,6 +875,19 @@
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "trustedForwarder",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
 			}
 		],
 		"devdoc": {
@@ -683,6 +977,9 @@
 				"decimals()": {
 					"details": "Returns the number of decimals used to get its user representation. For example, if `decimals` equals `2`, a balance of `505` tokens should be displayed to a user as `5.05` (`505 / 10 ** 2`). Tokens usually opt for a value of 18, imitating the relationship between Ether and Wei. This is the default value returned by this function, unless it's overridden. NOTE: This information is only used for _display_ purposes: it in no way affects any of the arithmetic of the contract, including {IERC20-balanceOf} and {IERC20-transfer}."
 				},
+				"isTrustedForwarder(address)": {
+					"details": "Indicates whether any particular address is the trusted forwarder."
+				},
 				"name()": {
 					"details": "Returns the name of the token."
 				},
@@ -706,6 +1003,9 @@
 				},
 				"transferOwnership(address)": {
 					"details": "Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner."
+				},
+				"trustedForwarder()": {
+					"details": "Returns the address of the trusted forwarder."
 				}
 			},
 			"version": 1
@@ -718,7 +1018,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"Gymtoken.sol": "GymToken"
+			"GymToken.sol": "GymToken"
 		},
 		"evmVersion": "osaka",
 		"libraries": {},
@@ -746,6 +1046,14 @@
 			"urls": [
 				"bzz-raw://89393bb3212da1c0889601b9706a07b39419ddc4d2faab9eaf6e7f9152cf6a1c",
 				"dweb:/ipfs/QmcCfzzxv1Bkdz1c1yF4gQCeYb6Us5BJANnzTFqawfd1HL"
+			]
+		},
+		"@openzeppelin/contracts/metatx/ERC2771Context.sol": {
+			"keccak256": "0x9695d220b99dcf62910533bdf5d40d4cf6a4e04d5b106b6803a80586486dc7f7",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://83b7aecd65882d8953643dce144efe91367082cc01830c9c4ed3c8a4837fb558",
+				"dweb:/ipfs/QmQ5HxGavcCKjuhd8buv177qjG6A4kvxx4pZviceKdspdM"
 			]
 		},
 		"@openzeppelin/contracts/token/ERC20/ERC20.sol": {
@@ -780,12 +1088,12 @@
 				"dweb:/ipfs/Qmax9WHBnVsZP46ZxEMNRQpLQnrdE4dK8LehML1Py8FowF"
 			]
 		},
-		"Gymtoken.sol": {
-			"keccak256": "0xc5d727a45417404075bb59f3fac549bd71a31c440295d0b0eb122eaeb5c73873",
+		"GymToken.sol": {
+			"keccak256": "0x0a27a1ec497e4c1c665cd68fd3475fc87b66a724cafb83aa0d472152d2156af3",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://1b4e56d48e0fe495f879b31d11d8603becd9ffda85af1382f5bd377e1567aaa9",
-				"dweb:/ipfs/QmZ16Dz5ydsawzQzBhALdKiu5gsb32XXjZcaCrQqGxbkVV"
+				"bzz-raw://f9cee8c41a2cbaef8a967ed0bf2df523bb217c847226597ecc7b8047caf6aa47",
+				"dweb:/ipfs/QmQsSNr21pLmYtGcbQUkZRBbwT7sudgSNrNsYZ65gTj9TU"
 			]
 		}
 	},
