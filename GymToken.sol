@@ -116,7 +116,7 @@ contract GymToken is ERC20("GymToken", "G"), Ownable(msg.sender), ERC2771Context
     }
 
 
-    function buyProduct(address addMarketplace, uint256 _ProductId, uint256 _quantity, uint256 _TotalPrice) internal {
+    function buyProduct(address addMarketplace, uint256 _ProductId, uint256 _quantity, uint256 _TotalPrice) external  {
         require(_quantity > 0, "Quantity must be greater than 0");
         (uint256 index, bool found) = findTheProductIndex(addMarketplace, _ProductId);
         require(found, "Product Not Found");
