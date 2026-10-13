@@ -141,6 +141,9 @@ contract GymToken is ERC20("GymToken", "G"), Ownable(msg.sender), ERC2771Context
         purchasesClinet[_clinet].push(newPurchases);
     }
 
+    function getMerchantProducts(address _merchantAddress) external view returns (productById[] memory){
+        return marketplace[_merchantAddress];
+    }
 
     function    getsales() external view returns (sales[] memory) {
         return salesGymOwner[_msgSender()];
