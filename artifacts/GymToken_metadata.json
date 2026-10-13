@@ -517,6 +517,34 @@
 			{
 				"inputs": [
 					{
+						"internalType": "address",
+						"name": "addMarketplace",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_ProductId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_quantity",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_TotalPrice",
+						"type": "uint256"
+					}
+				],
+				"name": "buyProduct",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
 						"internalType": "uint256",
 						"name": "index",
 						"type": "uint256"
@@ -576,6 +604,64 @@
 				"name": "editProduct",
 				"outputs": [],
 				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_merchantAddress",
+						"type": "address"
+					}
+				],
+				"name": "getMerchantProducts",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "id",
+								"type": "uint256"
+							},
+							{
+								"components": [
+									{
+										"internalType": "string",
+										"name": "name",
+										"type": "string"
+									},
+									{
+										"internalType": "string",
+										"name": "description",
+										"type": "string"
+									},
+									{
+										"internalType": "uint256",
+										"name": "stok",
+										"type": "uint256"
+									},
+									{
+										"internalType": "uint256",
+										"name": "price",
+										"type": "uint256"
+									},
+									{
+										"internalType": "string[]",
+										"name": "productImages",
+										"type": "string[]"
+									}
+								],
+								"internalType": "struct GymToken.product",
+								"name": "product",
+								"type": "tuple"
+							}
+						],
+						"internalType": "struct GymToken.productById[]",
+						"name": "",
+						"type": "tuple[]"
+					}
+				],
+				"stateMutability": "view",
 				"type": "function"
 			},
 			{
@@ -1089,11 +1175,11 @@
 			]
 		},
 		"GymToken.sol": {
-			"keccak256": "0x0a27a1ec497e4c1c665cd68fd3475fc87b66a724cafb83aa0d472152d2156af3",
+			"keccak256": "0x80de630edba6fc69d4105bfa082b231acea7f236342a6084a380b6dbf411027b",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://f9cee8c41a2cbaef8a967ed0bf2df523bb217c847226597ecc7b8047caf6aa47",
-				"dweb:/ipfs/QmQsSNr21pLmYtGcbQUkZRBbwT7sudgSNrNsYZ65gTj9TU"
+				"bzz-raw://31bc41b9bbc4adc3a9fc7a9394f69db668d39600caf0ead0a304c2a5d521a9a3",
+				"dweb:/ipfs/QmWSc3RFfV3chPXWaMTKZfD8a2mKkuf3uAoACCVPbbJSPo"
 			]
 		}
 	},

@@ -27,7 +27,6 @@ contract GymToken is ERC20("GymToken", "G"), Ownable(msg.sender), ERC2771Context
     
     struct sales {
         uint256 id;
-        string productImage;
         string productName;
         address client;
         uint256 quantity;
@@ -38,7 +37,6 @@ contract GymToken is ERC20("GymToken", "G"), Ownable(msg.sender), ERC2771Context
     
     struct purchases {
         uint256 id;
-        string productImage;
         string productName;
         address gymOwner;
         uint256 quantity;
@@ -134,8 +132,8 @@ contract GymToken is ERC20("GymToken", "G"), Ownable(msg.sender), ERC2771Context
         _transfer(_clinet, addMarketplace, totalPrice);
         emit ProductBought(_clinet, addMarketplace, _ProductId, _quantity);
 
-        sales memory newSales = sales(salesGymOwner[addMarketplace].length, marketplace[addMarketplace][index].product.productImages[0], productName, _clinet, _quantity, block.timestamp, totalPrice, false);
-        purchases memory newPurchases = purchases(purchasesClinet[_clinet].length, marketplace[addMarketplace][index].product.productImages[0], productName, addMarketplace, _quantity, block.timestamp, totalPrice);
+        sales memory newSales = sales(salesGymOwner[addMarketplace].length, productName, _clinet, _quantity, block.timestamp, totalPrice, false);
+        purchases memory newPurchases = purchases(purchasesClinet[_clinet].length, productName, addMarketplace, _quantity, block.timestamp, totalPrice);
 
         salesGymOwner[addMarketplace].push(newSales);
         purchasesClinet[_clinet].push(newPurchases);
